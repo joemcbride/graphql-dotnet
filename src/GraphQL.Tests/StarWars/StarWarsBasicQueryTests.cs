@@ -1,9 +1,12 @@
+using GraphQL.Tests.DI;
+
 namespace GraphQL.Tests.StarWars
 {
     public class StarWarsBasicQueryTests : StarWarsTestBase
     {
-        [Fact]
-        public void identifies_r2_as_the_hero()
+        [Theory]
+        [DependencyInjectionData]
+        public void identifies_r2_as_the_hero(string container)
         {
             var query = @"
                 query HeroNameQuery {
@@ -22,8 +25,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void can_query_without_query_name()
+        [Theory]
+        [DependencyInjectionData]
+        public void can_query_without_query_name(string container)
         {
             var query = @"
                {
@@ -42,8 +46,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void can_query_for_the_id_and_friends_of_r2()
+        [Theory]
+        [DependencyInjectionData]
+        public void can_query_for_the_id_and_friends_of_r2(string container)
         {
             var query = @"
                 query HeroNameAndFriendsQuery {
@@ -75,8 +80,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void can_query_for_humans()
+        [Theory]
+        [DependencyInjectionData]
+        public void can_query_for_humans(string container)
         {
             var query = @"
                {
@@ -97,8 +103,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void can_query_for_friends_of_humans()
+        [Theory]
+        [DependencyInjectionData]
+        public void can_query_for_friends_of_humans(string container)
         {
             var query = @"
                {
@@ -125,8 +132,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void can_query_for_connected_friends_of_humans()
+        [Theory]
+        [DependencyInjectionData]
+        public void can_query_for_connected_friends_of_humans(string container)
         {
             var query = @"
                {
@@ -190,8 +198,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void can_query_for_droids()
+        [Theory]
+        [DependencyInjectionData]
+        public void can_query_for_droids(string container)
         {
             var query = @"
                {
@@ -210,8 +219,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void can_query_for_connected_friends_of_droids_second_page()
+        [Theory]
+        [DependencyInjectionData]
+        public void can_query_for_connected_friends_of_droids_second_page(string container)
         {
             var query = @"
                {
@@ -264,8 +274,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void create_generic_query_that_fetches_luke()
+        [Theory]
+        [DependencyInjectionData]
+        public void create_generic_query_that_fetches_luke(string container)
         {
             var query = @"
                 query humanQuery($id: String!) {
@@ -287,8 +298,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected, inputs);
         }
 
-        [Fact]
-        public void query_same_root_field_using_alias()
+        [Theory]
+        [DependencyInjectionData]
+        public void query_same_root_field_using_alias(string container)
         {
             var query = @"
                query SomeDroids {
@@ -314,8 +326,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void can_add_new_human()
+        [Theory]
+        [DependencyInjectionData]
+        public void can_add_new_human(string container)
         {
             var mutation = @"mutation ($human:HumanInput!){ createHuman(human: $human) { name homePlanet } }";
 

@@ -1,5 +1,6 @@
 using GraphQL.StarWars;
 using GraphQL.StarWars.Types;
+using GraphQL.Tests.DI;
 using GraphQL.Types;
 
 namespace GraphQL.Tests.StarWars
@@ -8,8 +9,9 @@ namespace GraphQL.Tests.StarWars
     {
         public StarWarsQuery RootQuery => (StarWarsQuery)Schema.Query;
 
-        [Fact]
-        public void subfields_is_not_null_for_ListGraphType_of_ObjectGraphType()
+        [Theory]
+        [DependencyInjectionData]
+        public void subfields_is_not_null_for_ListGraphType_of_ObjectGraphType(string container)
         {
             RootQuery.Field<ListGraphType<HumanType>>("listOfHumans", resolve: ctx =>
             {
@@ -37,8 +39,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void subfields_is_not_null_for_single_ObjectGraphType()
+        [Theory]
+        [DependencyInjectionData]
+        public void subfields_is_not_null_for_single_ObjectGraphType(string container)
         {
             RootQuery.Field<HumanType>("singleHuman", resolve: ctx =>
             {
@@ -66,8 +69,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void subfields_is_not_null_for_ListGraphType_of_InterfaceGraphType()
+        [Theory]
+        [DependencyInjectionData]
+        public void subfields_is_not_null_for_ListGraphType_of_InterfaceGraphType(string container)
         {
             RootQuery.Field<ListGraphType<CharacterInterface>>("listOfCharacters", resolve: ctx =>
             {
@@ -95,8 +99,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void subfields_is_not_null_for_single_InterfaceGraphType()
+        [Theory]
+        [DependencyInjectionData]
+        public void subfields_is_not_null_for_single_InterfaceGraphType(string container)
         {
             RootQuery.FieldAsync<CharacterInterface>("singleCharacter", resolve: ctx =>
            {
@@ -125,8 +130,9 @@ namespace GraphQL.Tests.StarWars
         }
 
 
-        [Fact]
-        public void subfields_does_not_throw_for_primitive()
+        [Theory]
+        [DependencyInjectionData]
+        public void subfields_does_not_throw_for_primitive(string container)
         {
             RootQuery.Field<IntGraphType>("someNumber", resolve: ctx =>
             {
@@ -147,8 +153,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void subfields_does_not_throw_for_list_of_primitive()
+        [Theory]
+        [DependencyInjectionData]
+        public void subfields_does_not_throw_for_list_of_primitive(string container)
         {
             RootQuery.Field<ListGraphType<IntGraphType>>("someNumbers", resolve: ctx =>
             {
@@ -169,8 +176,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void subfields_contains_keys_from_fragment_spread_on_non_null_fields()
+        [Theory]
+        [DependencyInjectionData]
+        public void subfields_contains_keys_from_fragment_spread_on_non_null_fields(string container)
         {
             RootQuery.Field<NonNullGraphType<HumanType>>("luke", resolve: context =>
             {
@@ -205,8 +213,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void subfields_contains_keys_from_inline_fragment_on_non_null_fields()
+        [Theory]
+        [DependencyInjectionData]
+        public void subfields_contains_keys_from_inline_fragment_on_non_null_fields(string container)
         {
             RootQuery.Field<NonNullGraphType<HumanType>>("luke", resolve: context =>
             {
@@ -240,8 +249,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void subfields_contains_keys_from_fragment_spread_on_list_fields()
+        [Theory]
+        [DependencyInjectionData]
+        public void subfields_contains_keys_from_fragment_spread_on_list_fields(string container)
         {
             RootQuery.Field<ListGraphType<HumanType>>("lukes", resolve: context =>
             {
@@ -281,8 +291,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void subfields_contains_keys_from_inline_fragment_on_list_fields()
+        [Theory]
+        [DependencyInjectionData]
+        public void subfields_contains_keys_from_inline_fragment_on_list_fields(string container)
         {
             RootQuery.Field<ListGraphType<HumanType>>("lukes", resolve: context =>
             {

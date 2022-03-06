@@ -1,3 +1,4 @@
+using GraphQL.Tests.DI;
 using GraphQL.Validation;
 using GraphQL.Validation.Errors;
 using GraphQLParser;
@@ -6,8 +7,9 @@ namespace GraphQL.Tests.StarWars
 {
     public class StarWarsFragmentTests : StarWarsTestBase
     {
-        [Fact]
-        public void use_fragment_spread_to_avoid_duplicate_content()
+        [Theory]
+        [DependencyInjectionData]
+        public void use_fragment_spread_to_avoid_duplicate_content(string container)
         {
             var query = @"
                query SomeDroids {
@@ -36,8 +38,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void use_inline_fragment_on_interface()
+        [Theory]
+        [DependencyInjectionData]
+        public void use_inline_fragment_on_interface(string container)
         {
             var query = @"
                query SomeDroids {
@@ -58,8 +61,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void use_unnamed_inline_fragment_on_interface()
+        [Theory]
+        [DependencyInjectionData]
+        public void use_unnamed_inline_fragment_on_interface(string container)
         {
             var query = @"
                query SomeDroids {
@@ -80,8 +84,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void use_undefined_fragment()
+        [Theory]
+        [DependencyInjectionData]
+        public void use_undefined_fragment(string container)
         {
             var query = @"
                 query someDroids {

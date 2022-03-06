@@ -1,9 +1,12 @@
+using GraphQL.Tests.DI;
+
 namespace GraphQL.Tests.StarWars
 {
     public class StarWarsIntrospectionTests : StarWarsTestBase
     {
-        [Fact]
-        public void provides_typename()
+        [Theory]
+        [DependencyInjectionData]
+        public void provides_typename(string container)
         {
             var query = "{ hero { __typename name } }";
 
@@ -12,8 +15,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void allows_querying_schema_for_an_object_kind()
+        [Theory]
+        [DependencyInjectionData]
+        public void allows_querying_schema_for_an_object_kind(string container)
         {
             var query = @"
                 query IntrospectionDroidKindQuery {
@@ -34,8 +38,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void allows_querying_schema_for_an_interface_kind()
+        [Theory]
+        [DependencyInjectionData]
+        public void allows_querying_schema_for_an_interface_kind(string container)
         {
             var query = @"
             query IntrospectionCharacterKindQuery {
@@ -56,8 +61,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void allows_querying_schema_for_possibleTypes_of_an_interface()
+        [Theory]
+        [DependencyInjectionData]
+        public void allows_querying_schema_for_possibleTypes_of_an_interface(string container)
         {
             var query = @"
             query IntrospectionCharacterKindQuery {
@@ -86,8 +92,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void allows_querying_the_schema_for_object_fields()
+        [Theory]
+        [DependencyInjectionData]
+        public void allows_querying_the_schema_for_object_fields(string container)
         {
             var query = @"
             query IntrospectionDroidFieldsQuery {
@@ -157,8 +164,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void allows_querying_the_schema_for_documentation()
+        [Theory]
+        [DependencyInjectionData]
+        public void allows_querying_the_schema_for_documentation(string container)
         {
             var query = @"
             query IntrospectionDroidDescriptionQuery {
@@ -178,8 +186,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, expected);
         }
 
-        [Fact]
-        public void allows_querying_the_schema()
+        [Theory]
+        [DependencyInjectionData]
+        public void allows_querying_the_schema(string container)
         {
             var query = @"
             query SchemaIntrospectionQuery {
@@ -322,8 +331,9 @@ namespace GraphQL.Tests.StarWars
         }
 
         // https://github.com/graphql-dotnet/graphql-dotnet/issues/2233
-        [Fact]
-        public void allow_querying_input_object_type_fields()
+        [Theory]
+        [DependencyInjectionData]
+        public void allow_querying_input_object_type_fields(string container)
         {
             var query = @"{
   __type(name: ""HumanInput"") {
@@ -336,8 +346,9 @@ namespace GraphQL.Tests.StarWars
             AssertQuerySuccess(query, "HumanInputIntrospectionResult".ReadJsonResult());
         }
 
-        [Fact]
-        public void allows_querying_field_args()
+        [Theory]
+        [DependencyInjectionData]
+        public void allows_querying_field_args(string container)
         {
             var query = @"
             query SchemaIntrospectionQuery {

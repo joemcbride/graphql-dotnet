@@ -32,10 +32,10 @@ namespace GraphQL.Validation
         /// </summary>
         public GraphQLOperationDefinition Operation { get; set; } = null!;
 
-        /// <inheritdoc cref="ExecutionContext.Schema"/>
+        /// <inheritdoc cref="IExecutionContext.Schema"/>
         public ISchema Schema { get; set; } = null!;
 
-        /// <inheritdoc cref="ExecutionContext.Document"/>
+        /// <inheritdoc cref="IExecutionContext.Document"/>
         public GraphQLDocument Document { get; set; } = null!;
 
         /// <inheritdoc cref="Validation.TypeInfo"/>

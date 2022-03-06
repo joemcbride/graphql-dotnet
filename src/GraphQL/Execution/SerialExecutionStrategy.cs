@@ -22,10 +22,10 @@ namespace GraphQL.Execution
         protected override async Task ExecuteNodeTreeAsync(ExecutionContext context, ObjectExecutionNode rootNode)
         {
             // Use a stack to track all nodes in the tree that need to be executed
-            var nodes = System.Threading.Interlocked.Exchange(ref _reusableNodes, null) ?? new Stack<ExecutionNode>();
+            var nodes = Interlocked.Exchange(ref _reusableNodes, null) ?? new Stack<ExecutionNode>();
             nodes.Push(rootNode);
-            var dataLoaderNodes = System.Threading.Interlocked.Exchange(ref _reusableDataLoaderNodes, null) ?? new Queue<ExecutionNode>();
-            var addlNodes = System.Threading.Interlocked.Exchange(ref _reusableAddlNodes, null) ?? new Stack<ExecutionNode>();
+            var dataLoaderNodes = Interlocked.Exchange(ref _reusableDataLoaderNodes, null) ?? new Queue<ExecutionNode>();
+            var addlNodes = Interlocked.Exchange(ref _reusableAddlNodes, null) ?? new Stack<ExecutionNode>();
 
             try
             {
@@ -79,9 +79,9 @@ namespace GraphQL.Execution
                 dataLoaderNodes.Clear();
                 addlNodes.Clear();
 
-                System.Threading.Interlocked.CompareExchange(ref _reusableNodes, nodes, null);
-                System.Threading.Interlocked.CompareExchange(ref _reusableDataLoaderNodes, dataLoaderNodes, null);
-                System.Threading.Interlocked.CompareExchange(ref _reusableAddlNodes, addlNodes, null);
+                Interlocked.CompareExchange(ref _reusableNodes, nodes, null);
+                Interlocked.CompareExchange(ref _reusableDataLoaderNodes, dataLoaderNodes, null);
+                Interlocked.CompareExchange(ref _reusableAddlNodes, addlNodes, null);
             }
         }
     }

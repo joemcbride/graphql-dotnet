@@ -1,11 +1,13 @@
+using GraphQL.Tests.DI;
 using GraphQL.Types;
 
 namespace GraphQL.Tests.Bugs
 {
     public class ArrayOfArrayTest : QueryTestBase<ArrayOfArraySchema>
     {
-        [Fact]
-        public void ArrayOfArray_Should_Return_As_Is()
+        [Theory]
+        [DependencyInjectionData]
+        public void ArrayOfArray_Should_Return_As_Is(string container)
         {
             var query = @"
 mutation {

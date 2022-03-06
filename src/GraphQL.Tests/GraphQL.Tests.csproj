@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="../Tests.props" />
 
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);IDE0060;xUnit1026</NoWarn> <!--Remove unused parameter 'container' if it is not part of a shipped public API/Theory method 'name' on test class 'class' does not use parameter 'container'.-->
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(SingleTestPlatform)' == 'true'">
     <TargetFramework>net6</TargetFramework>
   </PropertyGroup>
@@ -24,6 +28,7 @@
     <ProjectReference Include="..\GraphQL.MicrosoftDI\GraphQL.MicrosoftDI.csproj" />
     <ProjectReference Include="..\GraphQL.StarWars\GraphQL.StarWars.csproj" />
     <ProjectReference Include="..\GraphQL.NewtonsoftJson\GraphQL.NewtonsoftJson.csproj" />
+    <ProjectReference Include="..\GraphQL.StructureMap\GraphQL.StructureMap.csproj" />
     <ProjectReference Include="..\GraphQL.SystemReactive\GraphQL.SystemReactive.csproj" />
     <ProjectReference Include="..\GraphQL.SystemTextJson\GraphQL.SystemTextJson.csproj" />
     <ProjectReference Include="..\GraphQL.MemoryCache\GraphQL.MemoryCache.csproj" />

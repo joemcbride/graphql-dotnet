@@ -1,12 +1,14 @@
 using GraphQL.Instrumentation;
+using GraphQL.Tests.DI;
 using GraphQL.Tests.StarWars;
 
 namespace GraphQL.Tests.Instrumentation
 {
     public class ApolloTracingTests : StarWarsTestBase
     {
-        [Fact]
-        public void extension_has_expected_format()
+        [Theory]
+        [DependencyInjectionData]
+        public void extension_has_expected_format(string container)
         {
             var query = @"
 query {

@@ -30,8 +30,9 @@ public class RegistrationTests : QueryTestBase<RegistrationTests.MySchema>
         base.RegisterServices(register);
     }
 
-    [Fact]
-    public void Registration_Should_Work()
+    [Theory]
+    [DependencyInjectionData]
+    public void Registration_Should_Work(string container)
     {
         Schema.Initialize();
     }

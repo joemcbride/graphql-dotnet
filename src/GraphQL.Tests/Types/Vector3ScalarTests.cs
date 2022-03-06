@@ -1,3 +1,4 @@
+using GraphQL.Tests.DI;
 using GraphQL.Types;
 using GraphQLParser;
 using GraphQLParser.AST;
@@ -7,56 +8,65 @@ namespace GraphQL.Tests.Types
     // these tests relate to the code in custom-scalars.md
     public class Vector3ScalarTests : QueryTestBase<Vector3ScalarTests.Vector3ScalarSchema>
     {
-        [Fact]
-        public void test_parseliteral_string()
+        [Theory]
+        [DependencyInjectionData]
+        public void test_parseliteral_string(string container)
         {
             AssertQuerySuccess(@"{ input(arg: ""1,2,3"") }", @"{ ""input"": ""=1=2=3="" }");
         }
 
-        [Fact]
-        public void test_parseliteral_structured()
+        [Theory]
+        [DependencyInjectionData]
+        public void test_parseliteral_structured(string container)
         {
             AssertQuerySuccess(@"{ input(arg: {x:1,y:2,z:3}) }", @"{ ""input"": ""=1=2=3="" }");
         }
 
-        [Fact]
-        public void test_parsevalue_string()
+        [Theory]
+        [DependencyInjectionData]
+        public void test_parsevalue_string(string container)
         {
             AssertQuerySuccess(@"query($arg: Vector3) { input(arg: $arg) }", @"{ ""input"": ""=1=2=3="" }", @"{ ""arg"": ""1,2,3"" }".ToInputs());
         }
 
-        [Fact]
-        public void test_parsevalue_structured()
+        [Theory]
+        [DependencyInjectionData]
+        public void test_parsevalue_structured(string container)
         {
             AssertQuerySuccess(@"query($arg: Vector3) { input(arg: $arg) }", @"{ ""input"": ""=1=2=3="" }", @"{ ""arg"": { ""x"": 1, ""y"": 2, ""z"": 3 } }".ToInputs());
         }
 
-        [Fact]
-        public void test_default()
+        [Theory]
+        [DependencyInjectionData]
+        public void test_default(string container)
         {
             AssertQuerySuccess(@"{ input }", @"{ ""input"": ""=7=8=9="" }");
         }
 
-        [Fact]
-        public void test_output()
+        [Theory]
+        [DependencyInjectionData]
+        public void test_output(string container)
         {
             AssertQuerySuccess(@"{ output }", @"{ ""output"": { ""x"": 4, ""y"": 5, ""z"": 6 } }");
         }
 
-        [Fact]
-        public void test_loopback_with_value()
+        [Theory]
+        [DependencyInjectionData]
+        public void test_loopback_with_value(string container)
         {
             AssertQuerySuccess(@"{ loopback(arg: ""11,12,13"") }", @"{ ""loopback"": { ""x"": 11, ""y"": 12, ""z"": 13 } }");
         }
 
-        [Fact]
-        public void test_loopback_with_null()
+        [Theory]
+        [DependencyInjectionData]
+        public void test_loopback_with_null(string container)
         {
             AssertQuerySuccess(@"{ loopback }", @"{ ""loopback"": null }");
         }
 
-        [Fact]
-        public void test_parseLiteral_toAst()
+        [Theory]
+        [DependencyInjectionData]
+        public void test_parseLiteral_toAst(string container)
         {
             var scalar = new Vector3Type();
             var input = new Vector3(1, 2, 3);

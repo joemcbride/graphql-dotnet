@@ -5,7 +5,7 @@ namespace GraphQL.Tests.Language
 {
     public class CommentTests
     {
-        private static readonly GraphQLDocumentBuilder _builder = new GraphQLDocumentBuilder { IgnoreComments = false };
+        private static readonly GraphQLDocumentBuilder _builder = new() { IgnoreComments = false };
 
         [Fact]
         public void operation_comment_should_be_null()

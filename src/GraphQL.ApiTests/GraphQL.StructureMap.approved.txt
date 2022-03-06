@@ -1,0 +1,27 @@
+namespace GraphQL.StructureMap
+{
+    public class GraphQLBuilder : GraphQL.DI.GraphQLBuilderBase, GraphQL.DI.IServiceRegister
+    {
+        public GraphQLBuilder(StructureMap.IRegistry registry, System.Action<GraphQL.DI.IGraphQLBuilder>? configure) { }
+        public StructureMap.IRegistry Registry { get; }
+        public override GraphQL.DI.IServiceRegister Services { get; }
+        public GraphQL.DI.IServiceRegister Configure<TOptions>(System.Action<TOptions, System.IServiceProvider>? action = null)
+            where TOptions :  class, new () { }
+        public GraphQL.DI.IServiceRegister Register(System.Type serviceType, object implementationInstance, bool replace = false) { }
+        public GraphQL.DI.IServiceRegister Register(System.Type serviceType, System.Func<System.IServiceProvider, object> implementationFactory, GraphQL.DI.ServiceLifetime serviceLifetime, bool replace = false) { }
+        public GraphQL.DI.IServiceRegister Register(System.Type serviceType, System.Type implementationType, GraphQL.DI.ServiceLifetime serviceLifetime, bool replace = false) { }
+        public GraphQL.DI.IServiceRegister TryRegister(System.Type serviceType, object implementationInstance, GraphQL.DI.RegistrationCompareMode mode = 0) { }
+        public GraphQL.DI.IServiceRegister TryRegister(System.Type serviceType, System.Func<System.IServiceProvider, object> implementationFactory, GraphQL.DI.ServiceLifetime serviceLifetime, GraphQL.DI.RegistrationCompareMode mode = 0) { }
+        public GraphQL.DI.IServiceRegister TryRegister(System.Type serviceType, System.Type implementationType, GraphQL.DI.ServiceLifetime serviceLifetime, GraphQL.DI.RegistrationCompareMode mode = 0) { }
+    }
+    public static class GraphQLBuilderExtensions
+    {
+        public static StructureMap.IRegistry AddGraphQL(this StructureMap.IRegistry registry, System.Action<GraphQL.DI.IGraphQLBuilder>? configure) { }
+    }
+    public sealed class ServiceProviderAdapter : System.IServiceProvider
+    {
+        public ServiceProviderAdapter(StructureMap.IContainer container) { }
+        public StructureMap.IContainer Container { get; }
+        public object GetService(System.Type serviceType) { }
+    }
+}

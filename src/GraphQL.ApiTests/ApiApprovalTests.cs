@@ -15,6 +15,7 @@ public class ApiApprovalTests
     [InlineData(typeof(SystemTextJson.GraphQLSerializer))]
     [InlineData(typeof(NewtonsoftJson.GraphQLSerializer))]
     [InlineData(typeof(MicrosoftDI.ScopedFieldBuilderExtensions))]
+    [InlineData(typeof(StructureMap.GraphQLBuilder))]
     [InlineData(typeof(Caching.MemoryDocumentCache))]
     [InlineData(typeof(DataLoader.DataLoaderContext))]
     public void PublicApi(Type type)
