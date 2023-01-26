@@ -41,6 +41,7 @@ These are additional scalars provided by this project.
 | `ULong` | `ULongGraphType` | `ulong` | number |
 | `Uri` | `UriGraphType` | `Uri` | RFC 2396/2732/3986/3987 |
 | `UShort` | `UShortGraphType` | `ushort` | number |
+| `Version` | `VersionGraphType` | `Version` | major.minor.build.revision |
 
 Lists of data are also supported with any Scalar or Object types.
 

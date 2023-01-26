@@ -12,12 +12,12 @@ public class GuidGraphTypeTests : ScalarGraphTypeTest<GuidGraphType>
     [InlineData("936DA01F9ABD4d9d80C702AF85C822A")]
     [InlineData("936DA01F-9ABD-4d9d-80C7-02AF85C822A")]
     [InlineData("936DA01F")]
-    public void Coerces_Coerces_input_to_format_exception(object input)
+    public void Coerces_input_to_format_exception(object input)
         => AssertException<FormatException>(input);
 
     [Theory]
     [InlineData("936DA01F9ABD4d9d80C702AF85C822A8", "936DA01F-9ABD-4d9d-80C7-02AF85C822A8")]
     [InlineData("936DA01F-9ABD-4d9d-80C7-02AF85C822A8", "936DA01F-9ABD-4d9d-80C7-02AF85C822A8")]
-    public void Coerces_Coerces_input_to_valid_guid(object input, string expected)
+    public void Coerces_input_to_valid_guid(object input, string expected)
         => type.ParseValue(input).ShouldBe(new Guid(expected));
 }

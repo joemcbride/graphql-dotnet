@@ -134,6 +134,11 @@ public class MyQuery : ObjectGraphType
                 DefaultValue = new TimeOnly(1, 1, 3)
             }
 #endif
+            , new QueryArgument<VersionGraphType>
+            {
+                Name = "arg24",
+                DefaultValue = new Version(1, 2, 3)
+            }
             )
             .Resolve(ctx =>
             {
@@ -162,6 +167,7 @@ public class MyQuery : ObjectGraphType
                 var arg22 = ctx.GetArgument<DateOnly>("arg22");
                 var arg23 = ctx.GetArgument<TimeOnly>("arg23");
 #endif
+                var arg24 = ctx.GetArgument<Version>("arg24");
 
                 SuppressNoUsageWarning(arg01);
                 SuppressNoUsageWarning(arg02);
@@ -188,6 +194,7 @@ public class MyQuery : ObjectGraphType
                 SuppressNoUsageWarning(arg22);
                 SuppressNoUsageWarning(arg23);
 #endif
+                SuppressNoUsageWarning(arg24);
 
                 return "";
             });

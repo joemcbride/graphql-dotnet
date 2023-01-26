@@ -34,11 +34,3 @@ public class ShortGraphTypeTests : ScalarGraphTypeTest<ShortGraphType>
     public void Coerces_given_inputs_to_short_value(object input, short expected)
         => type.ParseValue(input).ShouldBe(expected);
 }
-
-public class ScalarGraphTypeTest<T> where T : ScalarGraphType, new()
-{
-    protected readonly T type = new();
-
-    protected void AssertException<TArg>(object value) where TArg : Exception =>
-        Should.Throw<TArg>(() => type.ParseValue(value));
-}

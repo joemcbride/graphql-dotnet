@@ -2581,6 +2581,15 @@ namespace GraphQL.Types
         public override object? ParseValue(object? value) { }
         public override object? Serialize(object? value) { }
     }
+    public class VersionGraphType : GraphQL.Types.ScalarGraphType
+    {
+        public VersionGraphType() { }
+        public override bool CanParseLiteral(GraphQLParser.AST.GraphQLValue value) { }
+        public override bool CanParseValue(object? value) { }
+        public override object? ParseLiteral(GraphQLParser.AST.GraphQLValue value) { }
+        public override object? ParseValue(object? value) { }
+        public override object? Serialize(object? value) { }
+    }
 }
 namespace GraphQL.Types.Relay
 {
