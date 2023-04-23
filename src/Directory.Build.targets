@@ -7,7 +7,7 @@
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
     <!--<EnableAotAnalyzer>true</EnableAotAnalyzer> PublishAot property enables it-->
     <!--<ILLinkTreatWarningsAsErrors>false</ILLinkTreatWarningsAsErrors> does not work-->
-    <WarningsNotAsErrors>$(WarningsNotAsErrors);IL2026;IL2055;IL2067;IL2070;IL2072;IL2075;IL2090;IL2091;IL2092;IL2095</WarningsNotAsErrors>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);IL2026;IL2055;IL2062;IL2067;IL2070;IL2072;IL2075;IL2077;IL2087;IL2090;IL2091;IL2092;IL2095</WarningsNotAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsPackable)' != 'true'">

@@ -546,6 +546,7 @@ namespace GraphQL
         /// <see cref="InputObjectGraphType{TSourceType}"/>, <see cref="AutoRegisteringInputObjectGraphType{TSourceType}"/>, and
         /// <see cref="AutoRegisteringObjectGraphType{TSourceType}"/> as generic types.
         /// </summary>
+        [RequiresUnreferencedCode("Types containing in the provided assembly might be removed")]
         public static IGraphQLBuilder AddGraphTypes(this IGraphQLBuilder builder, Assembly assembly)
         {
             // Graph types are always created with the transient lifetime, since they are only instantiated once

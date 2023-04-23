@@ -128,7 +128,7 @@ namespace GraphQL
         /// <param name="schema">The schema for which the mapping is registered.</param>
         /// <typeparam name="TClrType">The CLR property type from which to infer the GraphType.</typeparam>
         /// <param name="mode">Which registering mode to use - input only, output only or both.</param>
-        public static void AutoRegister<TClrType>(this ISchema schema, AutoRegisteringMode mode = AutoRegisteringMode.Both)
+        public static void AutoRegister<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.PublicMethods)] TClrType>(this ISchema schema, AutoRegisteringMode mode = AutoRegisteringMode.Both)
         {
             if (mode.HasFlag(AutoRegisteringMode.Output))
                 schema.RegisterTypeMapping<TClrType, AutoRegisteringObjectGraphType<TClrType>>();

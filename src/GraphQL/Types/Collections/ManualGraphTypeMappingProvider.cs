@@ -15,6 +15,6 @@ internal class ManualGraphTypeMappingProvider : IGraphTypeMappingProvider
         _isOutputType = graphType.IsOutputType();
     }
 
-    public Type? GetGraphTypeFromClrType(Type clrType, bool isInputType, Type? preferredGraphType)
+    public Type? GetGraphTypeFromClrType([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.PublicMethods)] Type clrType, bool isInputType, Type? preferredGraphType)
         => clrType == _clrType && (isInputType && _isInputType || !isInputType && _isOutputType) ? _graphType : preferredGraphType;
 }

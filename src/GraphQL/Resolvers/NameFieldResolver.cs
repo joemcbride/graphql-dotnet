@@ -60,7 +60,9 @@ namespace GraphQL.Resolvers
         /// <param name="target"> The type from which you want to get the value. </param>
         /// <param name="name"> Property/method name. </param>
         /// <returns> Compiled field resolver. </returns>
-        private static IFieldResolver CreateResolver(Type target, string name)
+        private static IFieldResolver CreateResolver(
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)] Type target,
+            string name)
         {
             var param = Expression.Parameter(typeof(IResolveFieldContext), "context");
             var source = Expression.MakeMemberAccess(param, _sourcePropertyInfo);

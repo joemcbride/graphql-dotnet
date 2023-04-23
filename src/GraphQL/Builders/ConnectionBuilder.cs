@@ -16,7 +16,7 @@ namespace GraphQL.Builders
         /// </summary>
         /// <typeparam name="TNodeType">The graph type of the connection's node.</typeparam>
         /// <typeparam name="TSourceType">The type of <see cref="IResolveFieldContext.Source"/>.</typeparam>
-        public static ConnectionBuilder<TSourceType> Create<TNodeType, TSourceType>()
+        public static ConnectionBuilder<TSourceType> Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TNodeType, TSourceType>()
             where TNodeType : IGraphType
             => ConnectionBuilder<TSourceType>.Create<TNodeType>();
 
@@ -27,7 +27,7 @@ namespace GraphQL.Builders
         /// <typeparam name="TNodeType">The graph type of the connection's node.</typeparam>
         /// <typeparam name="TEdgeType">The graph type of the connection's edge. Must derive from <see cref="EdgeType{TNodeType}">EdgeType</see>&lt;<typeparamref name="TNodeType"/>&gt;.</typeparam>
         /// <typeparam name="TSourceType">The type of <see cref="IResolveFieldContext.Source"/>.</typeparam>
-        public static ConnectionBuilder<TSourceType> Create<TNodeType, TEdgeType, TSourceType>()
+        public static ConnectionBuilder<TSourceType> Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TNodeType, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TEdgeType, TSourceType>()
             where TNodeType : IGraphType
             where TEdgeType : EdgeType<TNodeType>
             => ConnectionBuilder<TSourceType>.Create<TNodeType, TEdgeType>();
@@ -39,7 +39,7 @@ namespace GraphQL.Builders
         /// <typeparam name="TEdgeType">The graph type of the connection's edge. Must derive from <see cref="EdgeType{TNodeType}">EdgeType</see>&lt;<typeparamref name="TNodeType"/>&gt;.</typeparam>
         /// <typeparam name="TConnectionType">The graph type of the connection. Must derive from <see cref="ConnectionType{TNodeType, TEdgeType}">ConnectionType</see>&lt;<typeparamref name="TNodeType"/>, <typeparamref name="TEdgeType"/>&gt;.</typeparam>
         /// <typeparam name="TSourceType">The type of <see cref="IResolveFieldContext.Source"/>.</typeparam>
-        public static ConnectionBuilder<TSourceType> Create<TNodeType, TEdgeType, TConnectionType, TSourceType>()
+        public static ConnectionBuilder<TSourceType> Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TNodeType, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TEdgeType, TConnectionType, TSourceType>()
             where TNodeType : IGraphType
             where TEdgeType : EdgeType<TNodeType>
             where TConnectionType : ConnectionType<TNodeType, TEdgeType>
@@ -81,7 +81,7 @@ namespace GraphQL.Builders
         /// The connection type is <see cref="ConnectionType{TNodeType, TEdgeType}">ConnectionType</see>&lt;<typeparamref name="TNodeType"/>, <see cref="EdgeType{TNodeType}">EdgeType</see>&lt;<typeparamref name="TNodeType"/>&gt;&gt;.
         /// </summary>
         /// <typeparam name="TNodeType">The graph type of the connection's node.</typeparam>
-        public static ConnectionBuilder<TSourceType> Create<TNodeType>(string name = "default")
+        public static ConnectionBuilder<TSourceType> Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TNodeType>(string name = "default")
             where TNodeType : IGraphType => Create<TNodeType, EdgeType<TNodeType>>(name);
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace GraphQL.Builders
         /// </summary>
         /// <typeparam name="TNodeType">The graph type of the connection's node.</typeparam>
         /// <typeparam name="TEdgeType">The graph type of the connection's edge. Must derive from <see cref="EdgeType{TNodeType}">EdgeType</see>&lt;<typeparamref name="TNodeType"/>&gt;.</typeparam>
-        public static ConnectionBuilder<TSourceType> Create<TNodeType, TEdgeType>(string name = "default")
+        public static ConnectionBuilder<TSourceType> Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TNodeType, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TEdgeType>(string name = "default")
             where TNodeType : IGraphType
             where TEdgeType : EdgeType<TNodeType>
             => Create<TNodeType, TEdgeType, ConnectionType<TNodeType, TEdgeType>>(name);
@@ -101,7 +101,7 @@ namespace GraphQL.Builders
         /// <typeparam name="TNodeType">The graph type of the connection's node.</typeparam>
         /// <typeparam name="TEdgeType">The graph type of the connection's edge. Must derive from <see cref="EdgeType{TNodeType}">EdgeType</see>&lt;<typeparamref name="TNodeType"/>&gt;.</typeparam>
         /// <typeparam name="TConnectionType">The graph type of the connection. Must derive from <see cref="ConnectionType{TNodeType, TEdgeType}">ConnectionType</see>&lt;<typeparamref name="TNodeType"/>, <typeparamref name="TEdgeType"/>&gt;.</typeparam>
-        public static ConnectionBuilder<TSourceType> Create<TNodeType, TEdgeType, TConnectionType>(string name = "default")
+        public static ConnectionBuilder<TSourceType> Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TNodeType, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TEdgeType, TConnectionType>(string name = "default")
             where TNodeType : IGraphType
             where TEdgeType : EdgeType<TNodeType>
             where TConnectionType : ConnectionType<TNodeType, TEdgeType>

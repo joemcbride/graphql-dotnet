@@ -226,7 +226,7 @@ namespace GraphQL.Types
             _introspectionTypes = CreateIntrospectionTypes(schema.Features.AppliedDirectives, schema.Features.RepeatableDirectives, schema.Features.DeprecationOfInputValues);
 
             _context = new TypeCollectionContext(
-               type => BuildGraphQLType(type, t => _builtInScalars.TryGetValue(t, out var graphType) ? graphType : _introspectionTypes.TryGetValue(t, out graphType) ? graphType : (IGraphType)Activator.CreateInstance(t)!),
+               type => BuildGraphQLType(type, ([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] t) => _builtInScalars.TryGetValue(t, out var graphType) ? graphType : _introspectionTypes.TryGetValue(t, out graphType) ? graphType : (IGraphType)Activator.CreateInstance(t)!),
                (name, type, ctx) =>
                {
                    SetGraphType(name, type);
@@ -400,7 +400,9 @@ namespace GraphQL.Types
         /// </summary>
         public int Count => Dictionary.Count;
 
-        private IGraphType BuildGraphQLType(Type type, IGraphType resolvedType)
+        private IGraphType BuildGraphQLType(
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type,
+            IGraphType resolvedType)
             => BuildGraphQLType(type, _ => resolvedType);
 
         /// <summary>
@@ -411,10 +413,12 @@ namespace GraphQL.Types
         /// <see cref="IProvideResolvedType.ResolvedType"/> property is set to a new instance of
         /// the base (wrapped) type.
         /// </summary>
-        protected internal virtual IGraphType BuildGraphQLType(Type type, Func<Type, IGraphType> resolve)
+        protected internal virtual IGraphType BuildGraphQLType(
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type,
+            Func<Type, IGraphType> resolve)
         {
             var local = resolve;
-            local ??= t => (IGraphType)Activator.CreateInstance(t)!;
+            local ??= ([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] t) => (IGraphType)Activator.CreateInstance(t)!;
             resolve = t => FindGraphType(t) ?? local(t);
 
             if (type.IsGenericType)

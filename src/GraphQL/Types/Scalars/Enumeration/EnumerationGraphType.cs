@@ -118,10 +118,17 @@ public class EnumerationGraphType : ScalarGraphType
 /// Also it can get descriptions for enum fields from the XML comments.
 /// </summary>
 /// <typeparam name="TEnum"> The enum to take values from. </typeparam>
-public class EnumerationGraphType<TEnum> : EnumerationGraphType
+public class EnumerationGraphType<[DynamicallyAccessedMembers(GET_ALL_MEMBERS)] TEnum> : EnumerationGraphType
     where TEnum : Enum
 {
     private static readonly EnumCaseAttribute? _caseAttr = typeof(TEnum).GetCustomAttribute<EnumCaseAttribute>();
+
+    private const DynamicallyAccessedMemberTypes GET_ALL_MEMBERS = DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields |
+           DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods |
+           DynamicallyAccessedMemberTypes.PublicEvents | DynamicallyAccessedMemberTypes.NonPublicEvents |
+           DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties |
+           DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors |
+           DynamicallyAccessedMemberTypes.PublicNestedTypes | DynamicallyAccessedMemberTypes.NonPublicNestedTypes;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EnumerationGraphType"/> class.

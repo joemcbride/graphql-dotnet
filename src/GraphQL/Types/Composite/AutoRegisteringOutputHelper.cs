@@ -131,7 +131,11 @@ internal static class AutoRegisteringOutputHelper
     /// that do not return <see langword="void"/> or <see cref="Task"/>
     /// including properties and methods declared on inherited classes.
     /// </summary>
-    public static IEnumerable<MemberInfo> GetRegisteredMembers<TSourceType>(Expression<Func<TSourceType, object?>>[]? excludedProperties)
+#if NET6_0_OR_GREATER
+    public static IEnumerable<MemberInfo> GetRegisteredMembers<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.Interfaces)] TSourceType>(Expression<Func<TSourceType, object?>>[]? excludedProperties)
+#else
+    public static IEnumerable<MemberInfo> GetRegisteredMembers<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.PublicMethods)] TSourceType>(Expression<Func<TSourceType, object?>>[]? excludedProperties)
+#endif
     {
         if (typeof(TSourceType).IsInterface)
         {

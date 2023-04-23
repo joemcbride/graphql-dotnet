@@ -36,7 +36,7 @@ namespace GraphQL.Types
     }
 
     /// <inheritdoc cref="IInputObjectGraphType"/>
-    public class InputObjectGraphType<TSourceType> : ComplexGraphType<TSourceType>, IInputObjectGraphType
+    public class InputObjectGraphType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] TSourceType> : ComplexGraphType<TSourceType>, IInputObjectGraphType
     {
         /// <summary>
         /// Converts a supplied dictionary of keys and values to an object.

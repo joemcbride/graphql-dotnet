@@ -18,7 +18,7 @@ namespace GraphQL.Builders
         /// <typeparam name="TReturnType">The type of the return value of the resolver.</typeparam>
         /// <param name="type">The graph type of the field.</param>
         [Obsolete("Please use FieldBuilder<TSourceType, TReturnType>.Create() method. This method will be removed in v8.")]
-        public static FieldBuilder<TSourceType, TReturnType> Create<TSourceType, TReturnType>(Type? type = null)
+        public static FieldBuilder<TSourceType, TReturnType> Create<TSourceType, TReturnType>([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] Type? type = null)
             => FieldBuilder<TSourceType, TReturnType>.Create(type);
 
         /// <inheritdoc cref="Create{TSourceType, TReturnType}(Type)"/>
@@ -175,7 +175,7 @@ namespace GraphQL.Builders
         /// <param name="name">The name of the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="configure">A delegate to further configure the argument.</param>
-        public virtual FieldBuilder<TSourceType, TReturnType> Argument<TArgumentGraphType>(string name, string? description, Action<QueryArgument>? configure = null)
+        public virtual FieldBuilder<TSourceType, TReturnType> Argument<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TArgumentGraphType>(string name, string? description, Action<QueryArgument>? configure = null)
             where TArgumentGraphType : IGraphType
             => Argument<TArgumentGraphType>(name, arg =>
             {
@@ -193,7 +193,7 @@ namespace GraphQL.Builders
         /// <param name="defaultValue">The default value of the argument.</param>
         /// <param name="configure">A delegate to further configure the argument.</param>
         [Obsolete("Please use Action<QueryArgument> parameter from other Argument() method overloads to set default value for parameter or use Arguments() method. This method will be removed in v8.")]
-        public virtual FieldBuilder<TSourceType, TReturnType> Argument<TArgumentGraphType, TArgumentType>(string name, string? description,
+        public virtual FieldBuilder<TSourceType, TReturnType> Argument<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TArgumentGraphType, TArgumentType>(string name, string? description,
             TArgumentType? defaultValue = default, Action<QueryArgument>? configure = null)
             where TArgumentGraphType : IGraphType
             => Argument<TArgumentGraphType>(name, arg =>
@@ -208,7 +208,7 @@ namespace GraphQL.Builders
         /// </summary>
         /// <typeparam name="TArgumentGraphType">The graph type of the argument.</typeparam>
         /// <param name="name">The name of the argument.</param>
-        public virtual FieldBuilder<TSourceType, TReturnType> Argument<TArgumentGraphType>(string name)
+        public virtual FieldBuilder<TSourceType, TReturnType> Argument<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TArgumentGraphType>(string name)
             where TArgumentGraphType : IGraphType
             => Argument<TArgumentGraphType>(name, null);
 

@@ -12,5 +12,5 @@ public interface IGraphTypeMappingProvider
     /// <param name="clrType">The CLR type to be mapped.</param>
     /// <param name="isInputType">Indicates whether the type is an input type.</param>
     /// <param name="preferredGraphType">The graph type that is suggested for this CLR type.</param>
-    Type? GetGraphTypeFromClrType(Type clrType, bool isInputType, Type? preferredGraphType);
+    Type? GetGraphTypeFromClrType([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.PublicMethods)] Type clrType, bool isInputType, Type? preferredGraphType);
 }

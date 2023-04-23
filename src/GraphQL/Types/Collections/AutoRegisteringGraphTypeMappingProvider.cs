@@ -35,7 +35,7 @@ public class AutoRegisteringGraphTypeMappingProvider : IGraphTypeMappingProvider
     [DynamicDependency(DynamicallyAccessedMemberTypes.PublicConstructors, typeof(AutoRegisteringObjectGraphType<>))]
     [DynamicDependency(DynamicallyAccessedMemberTypes.PublicConstructors, typeof(AutoRegisteringInterfaceGraphType<>))]
     [DynamicDependency(DynamicallyAccessedMemberTypes.PublicConstructors, typeof(AutoRegisteringInputObjectGraphType<>))]
-    public virtual Type? GetGraphTypeFromClrType(Type clrType, bool isInputType, Type? preferredType)
+    public virtual Type? GetGraphTypeFromClrType([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.PublicMethods)] Type clrType, bool isInputType, Type? preferredType)
     {
         if (preferredType != null)
             return preferredType;

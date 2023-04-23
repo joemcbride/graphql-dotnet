@@ -21,7 +21,7 @@ public interface IConfigureAutoSchema
     Type SchemaType { get; }
 }
 
-internal class ConfigureAutoSchema<TQueryClrType> : IConfigureAutoSchema
+internal class ConfigureAutoSchema<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.PublicMethods)] TQueryClrType> : IConfigureAutoSchema
 {
     public ConfigureAutoSchema(IGraphQLBuilder baseBuilder)
     {
