@@ -19,6 +19,7 @@ namespace GraphQL
         /// <typeparam name="T">The type to create.</typeparam>
         /// <param name="source">The source of values.</param>
         /// <returns>T.</returns>
+        [RequiresUnreferencedCode("The type of the object to be converted to must be statically discoverable.")]
         public static T ToObject<T>(this IDictionary<string, object?> source)
             where T : class
             => (T)ToObject(source, typeof(T));
@@ -38,6 +39,7 @@ namespace GraphQL
         /// In case of configuring field as Field(x => x.FName).Name("FirstName") source dictionary
         /// will have 'FirstName' key but its value should be set to 'FName' property of created object.
         /// </param>
+        [RequiresUnreferencedCode("The type of the object to be converted to must be statically discoverable.")]
         public static object ToObject(this IDictionary<string, object?> source, Type type, IGraphType? mappedType = null)
         {
             // Given Field(x => x.FName).Name("FirstName") and key == "FirstName" returns "FName"
@@ -205,6 +207,7 @@ namespace GraphQL
         /// will have 'FirstName' key but its value should be set to 'FName' property of created object.
         /// </param>
         /// <remarks>There is special handling for strings, IEnumerable&lt;T&gt;, Nullable&lt;T&gt;, and Enum.</remarks>
+        [RequiresUnreferencedCode("The type of the object to be converted to must be statically discoverable.")]
         public static object? GetPropertyValue(this object? propertyValue, Type fieldType, IGraphType? mappedType = null)
         {
             // Short-circuit conversion if the property value already of the right type

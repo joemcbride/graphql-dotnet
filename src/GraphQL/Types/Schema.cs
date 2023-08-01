@@ -488,6 +488,8 @@ namespace GraphQL.Types
             CoerceInputTypeDefaultValues();
             SchemaValidationVisitor.Instance.Run(this);
             AppliedDirectivesValidationVisitor.Instance.Run(this);
+            if (!GlobalSwitches.IsDynamicCodeSupported)
+                AotValidationVisitor.Instance.Run(this);
         }
 
         /// <summary>

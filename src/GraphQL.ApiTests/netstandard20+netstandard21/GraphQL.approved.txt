@@ -2627,6 +2627,12 @@ namespace GraphQL.Types.Relay.DataObjects
 }
 namespace GraphQL.Utilities
 {
+    public class AotValidationVisitor : GraphQL.Utilities.BaseSchemaNodeVisitor
+    {
+        public AotValidationVisitor() { }
+        public static GraphQL.Utilities.AotValidationVisitor Instance { get; }
+        public override void VisitObjectFieldDefinition(GraphQL.Types.FieldType field, GraphQL.Types.IObjectGraphType type, GraphQL.Types.ISchema schema) { }
+    }
     public sealed class AppliedDirectivesValidationVisitor : GraphQL.Utilities.ISchemaNodeVisitor
     {
         public static readonly GraphQL.Utilities.AppliedDirectivesValidationVisitor Instance;

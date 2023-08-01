@@ -46,6 +46,8 @@ namespace GraphQL.Types
         /// much like a field resolver does for output objects. For example, you can set some 'computed'
         /// properties for your input object which were not passed in the GraphQL request.
         /// </summary>
+        [UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code",
+            Justification = "Field expressions are required and ensure that properties can be statically identified.")]
         public virtual object ParseDictionary(IDictionary<string, object?> value)
         {
             if (value == null)

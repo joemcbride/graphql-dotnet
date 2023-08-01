@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using GraphQL.Conversion;
 using GraphQL.Utilities;
 
@@ -83,4 +84,14 @@ public static class GlobalSwitches
     /// The collection is not thread-safe; instances should be added prior to schema initialization.
     /// </summary>
     public static ICollection<GraphQLAttribute> GlobalAttributes { get; } = new List<GraphQLAttribute>();
+
+    /// <summary>
+    /// Gets a value that determines whether the runtime supports dynamic code.
+    /// </summary>
+    internal static bool IsDynamicCodeSupported
+#if NETSTANDARD2_0
+        => true;
+#else
+        => RuntimeFeature.IsDynamicCodeSupported;
+#endif
 }

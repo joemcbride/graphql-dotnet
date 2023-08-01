@@ -614,9 +614,12 @@ namespace GraphQL
     }
     public static class ObjectExtensions
     {
+        [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("The type of the object to be converted to must be statically discoverable.")]
         public static object? GetPropertyValue(this object? propertyValue, System.Type fieldType, GraphQL.Types.IGraphType? mappedType = null) { }
         public static bool IsDefinedEnumValue(System.Type type, object? value) { }
+        [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("The type of the object to be converted to must be statically discoverable.")]
         public static object ToObject(this System.Collections.Generic.IDictionary<string, object?> source, System.Type type, GraphQL.Types.IGraphType? mappedType = null) { }
+        [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("The type of the object to be converted to must be statically discoverable.")]
         public static T ToObject<T>(this System.Collections.Generic.IDictionary<string, object?> source)
             where T :  class { }
     }
@@ -2269,6 +2272,9 @@ namespace GraphQL.Types
     {
         public InputObjectGraphType() { }
         public virtual bool IsValidDefault(object value) { }
+        [System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with \'RequiresUnreferencedCodeAttribute\' require dynamic" +
+            " access otherwise can break functionality when trimming application code", Justification="Field expressions are required and ensure that properties can be statically ident" +
+            "ified.")]
         public virtual object ParseDictionary(System.Collections.Generic.IDictionary<string, object?> value) { }
         public virtual GraphQLParser.AST.GraphQLValue ToAST(object? value) { }
     }
@@ -2682,6 +2688,12 @@ namespace GraphQL.Types.Relay.DataObjects
 }
 namespace GraphQL.Utilities
 {
+    public class AotValidationVisitor : GraphQL.Utilities.BaseSchemaNodeVisitor
+    {
+        public AotValidationVisitor() { }
+        public static GraphQL.Utilities.AotValidationVisitor Instance { get; }
+        public override void VisitObjectFieldDefinition(GraphQL.Types.FieldType field, GraphQL.Types.IObjectGraphType type, GraphQL.Types.ISchema schema) { }
+    }
     public sealed class AppliedDirectivesValidationVisitor : GraphQL.Utilities.ISchemaNodeVisitor
     {
         public static readonly GraphQL.Utilities.AppliedDirectivesValidationVisitor Instance;
