@@ -248,7 +248,7 @@ namespace GraphQL.Execution
                     }
                 }
 
-                var obj = new Dictionary<string, object?>();
+                var obj = new Dictionary<string, object?>(StringComparer.InvariantCultureIgnoreCase);
 
                 foreach (var field in inputObjectGraphType.Fields.List)
                 {

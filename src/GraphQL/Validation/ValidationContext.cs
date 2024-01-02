@@ -373,7 +373,7 @@ namespace GraphQL.Validation
                     throw new InvalidVariableError(this, variableDef, variableName, $"Unable to parse input as a '{graphType.Name}' type. Did you provide a List or Scalar value accidentally?");
                 }
 
-                var newDictionary = new Dictionary<string, object?>(dic.Count);
+                var newDictionary = new Dictionary<string, object?>(dic.Count, StringComparer.InvariantCultureIgnoreCase);
                 foreach (var field in graphType.Fields.List)
                 {
                     var childFieldVariableName = new VariableName(variableName, field.Name);

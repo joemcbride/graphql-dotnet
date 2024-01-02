@@ -1,0 +1,306 @@
+using System.Text;
+using GraphQL.Analyzers.Helpers;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
+using static GraphQL.Analyzers.Helpers.GeneratorConstants;
+
+namespace GraphQL.Analyzers;
+
+[Generator]
+public class InputObjectParserGenerator : IIncrementalGenerator
+{
+    private const string RESULT = "result";
+
+    public void Initialize(IncrementalGeneratorInitializationContext generatorContext)
+    {
+        var entries = generatorContext.SyntaxProvider
+            .CreateSyntaxProvider(InputObjectDeclarationPredicate, Transform)
+            .Where(entry => entry != null)
+            .Select((entry, _) => entry!.Value)
+            .Combine(generatorContext.CompilationProvider) // TODO inefficient
+            .Select((tuple, _) => (compilation: tuple.Right, tuple.Left.classDeclaration, tuple.Left.sourceTypeSymbol));
+
+        generatorContext.RegisterSourceOutput(entries, GenerateSource);
+    }
+
+    private static bool InputObjectDeclarationPredicate(SyntaxNode node, CancellationToken _) =>
+        node is ClassDeclarationSyntax classDeclaration
+        && classDeclaration.BaseList?.Types.Any() == true
+        && classDeclaration.Modifiers.Any(SyntaxKind.PartialKeyword);
+
+    private static (ClassDeclarationSyntax classDeclaration, ITypeSymbol sourceTypeSymbol)? Transform(
+        GeneratorSyntaxContext context,
+        CancellationToken token)
+    {
+        (ClassDeclarationSyntax classDeclaration, ITypeSymbol sourceTypeSymbol)? nullResult = null;
+        var classDeclaration = (ClassDeclarationSyntax)context.Node;
+
+        var typeSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration, token);
+        if (typeSymbol == null)
+        {
+            return nullResult;
+        }
+
+        var sourceTypeSymbol = GetSourceTypeSymbol(classDeclaration, context, token);
+        if (sourceTypeSymbol == null || sourceTypeSymbol.SpecialType == SpecialType.System_Object)
+        {
+            return nullResult;
+        }
+
+        return (classDeclaration, sourceTypeSymbol);
+    }
+
+    private static ITypeSymbol? GetSourceTypeSymbol(
+        ClassDeclarationSyntax inputClassDeclaration,
+        GeneratorSyntaxContext context,
+        CancellationToken token)
+    {
+        var typeSymbol = context.SemanticModel.GetDeclaredSymbol(inputClassDeclaration, token);
+        if (typeSymbol == null)
+        {
+            return null;
+        }
+
+        // quick test for interface implementation before iterating on base types
+        if (!typeSymbol.AllInterfaces.Any(i => i.Name == Constants.Interfaces.IInputObjectGraphType))
+        {
+            return null;
+        }
+
+        var genericInputObjectGraphType = context.SemanticModel.Compilation.GetTypeByMetadataName(Constants.MetadataNames.InputObjectGraphType);
+        var parseDictionaryBaseMethod = genericInputObjectGraphType?.GetMembers(Constants.MethodNames.ParseDictionary)
+            .OfType<IMethodSymbol>()
+            .Single(); // analyzers are not supposed to throw exceptions but we expect this to fail in tests if the base type changes
+
+        var sourceTypeSymbol = typeSymbol;
+        while (sourceTypeSymbol != null)
+        {
+            if (SymbolEqualityComparer.Default.Equals(sourceTypeSymbol.OriginalDefinition, genericInputObjectGraphType))
+            {
+                return sourceTypeSymbol.TypeArguments.Single(); // <TSourceType>
+            }
+
+            bool overridesParseDictionary = sourceTypeSymbol
+                .GetMembers("ParseDictionary")
+                .OfType<IMethodSymbol>()
+                .Any(m => SymbolEqualityComparer.Default.Equals(m.OverriddenMethod?.OriginalDefinition, parseDictionaryBaseMethod));
+
+            if (overridesParseDictionary)
+            {
+                return null;
+            }
+
+            sourceTypeSymbol = sourceTypeSymbol.BaseType;
+        }
+
+        return null;
+    }
+
+    private static void GenerateSource(
+        SourceProductionContext context,
+        (Compilation compilation, ClassDeclarationSyntax classDeclaration, ITypeSymbol sourceTypeSymbol) tuple)
+    {
+        var compilation = tuple.compilation;
+        var classDeclaration = tuple.classDeclaration;
+        var sourceTypeSymbol = tuple.sourceTypeSymbol;
+
+        string name = $"{classDeclaration.Identifier.Text}.g.cs";
+        var @namespace = FindNamespace(classDeclaration);
+
+        bool isGlobalNamespace = @namespace == null;
+        bool isFileScopedNamespace = @namespace?.IsKind(SyntaxKind.FileScopedNamespaceDeclaration) == true;
+        bool isBlockNamespace = @namespace?.IsKind(SyntaxKind.NamespaceDeclaration) == true;
+        string indentation = isGlobalNamespace || isFileScopedNamespace ? string.Empty : SINGLE_INDENTATION;
+
+        string sourceFile =
+            $"""
+             // <auto-generated />
+             {GenerateUsings()}
+             {GenerateNamespace(@namespace)}{(isBlockNamespace ? "{" : null)}
+             {GenerateClass(compilation, classDeclaration, sourceTypeSymbol, indentation)}{(isBlockNamespace ? $"{NewLine}}}" : null)}
+             """;
+
+        context.AddSource(
+            name,
+            SourceText.From(sourceFile, Encoding.UTF8, SourceHashAlgorithm.Sha256));
+    }
+
+    private static BaseNamespaceDeclarationSyntax? FindNamespace(SyntaxNode node) =>
+        node.Ancestors().OfType<BaseNamespaceDeclarationSyntax>().FirstOrDefault();
+
+    private static string GenerateUsings() =>
+        "using System.Collections.Generic;";
+
+    private static string? GenerateNamespace(BaseNamespaceDeclarationSyntax? @namespace) =>
+        @namespace?.IsKind(SyntaxKind.FileScopedNamespaceDeclaration) switch
+        {
+            null => null,
+            true =>
+                $"""
+
+                 namespace {@namespace.Name};
+
+                 """,
+            false =>
+                $"""
+
+                 namespace {@namespace.Name}
+
+                 """
+        };
+
+    private static string GenerateClass(
+        Compilation compilation,
+        BaseTypeDeclarationSyntax classDeclaration,
+        ITypeSymbol sourceTypeSymbol,
+        string ind)
+    {
+        var fields = new List<string>();
+        foreach (var fieldInvocationExpression in GetDeclaredFields(classDeclaration))
+        {
+            var semanticModel = compilation.GetSemanticModel(fieldInvocationExpression.SyntaxTree);
+            var nameArg = fieldInvocationExpression
+                .GetMethodArgument(Constants.ArgumentNames.Name, semanticModel)
+                ?.Expression;
+
+            string? fieldName = null;
+            switch (nameArg)
+            {
+                case LiteralExpressionSyntax literal:
+                    fieldName = literal.Token.ValueText;
+                    break;
+                case IdentifierNameSyntax: // ConstField
+                case MemberAccessExpressionSyntax: // ConstClass.ConstField
+                    var nameSymbol = semanticModel.GetSymbolInfo(nameArg).Symbol;
+                    if (nameSymbol is IFieldSymbol { IsConst: true, ConstantValue: string } constSymbol)
+                    {
+                        fieldName = (string)constSymbol.ConstantValue!;
+                    }
+                    break;
+            }
+
+            if (fieldName != null)
+            {
+                fields.Add(fieldName);
+            }
+        }
+
+        var props = GetAllowedFieldNames(sourceTypeSymbol)
+            .ToDictionary(s => s.Name, StringComparer.InvariantCultureIgnoreCase);
+
+        return $$"""
+                 {{ind}}{{classDeclaration.Modifiers}} class {{classDeclaration.Identifier}}
+                 {{ind}}{
+                 {{ind}}    public override object ParseDictionary(IDictionary<string, object> value)
+                 {{ind}}    {
+                 {{ind}}        if (value == null)
+                 {{ind}}        {
+                 {{ind}}            return null;
+                 {{ind}}        }
+
+                 {{ind}}        var {{RESULT}} = {{InitializeResultObject(sourceTypeSymbol /*, ind + DOUBLE_INDENTATION*/)}}
+                 {{InitializeProperties(ind + DOUBLE_INDENTATION, fields, props)}}
+                 {{ind}}        return {{RESULT}};
+                 {{ind}}    }
+                 {{ind}}}
+                 """;
+    }
+
+    private static IEnumerable<InvocationExpressionSyntax> GetDeclaredFields(
+        BaseTypeDeclarationSyntax classDeclaration)
+    {
+        return classDeclaration
+            .DescendantNodes()
+            .OfType<InvocationExpressionSyntax>()
+            .Where(IsFieldInvocation);
+
+        static bool IsFieldInvocation(InvocationExpressionSyntax exp)
+        {
+            return exp.Expression switch
+            {
+                // Field
+                SimpleNameSyntax nameSyntax =>
+                    IsField(nameSyntax),
+                // this.Field
+                MemberAccessExpressionSyntax { Expression: ThisExpressionSyntax } expressionSyntax =>
+                    IsField(expressionSyntax.Name),
+                _ => false
+            };
+        }
+
+        static bool IsField(SimpleNameSyntax simpleNameSyntax) =>
+            simpleNameSyntax.Identifier.Text == Constants.MethodNames.Field;
+    }
+
+    private static IEnumerable<ISymbol> GetAllowedFieldNames(ITypeSymbol sourceTypeSymbol)
+    {
+        var symbols = Enumerable.Empty<ISymbol>();
+
+        var nullableSourceTypeSymbol = sourceTypeSymbol;
+        while (nullableSourceTypeSymbol != null)
+        {
+            var fieldsOrProperties = nullableSourceTypeSymbol
+                .GetMembers()
+                .Where(symbol => !symbol.IsImplicitlyDeclared && symbol
+                    is IPropertySymbol { SetMethod.DeclaredAccessibility: Accessibility.Public }
+                    or IFieldSymbol { DeclaredAccessibility: Accessibility.Public });
+
+            symbols = symbols.Concat(fieldsOrProperties);
+            nullableSourceTypeSymbol = nullableSourceTypeSymbol.BaseType;
+        }
+
+        return symbols;
+    }
+
+    private static string InitializeResultObject(
+        ISymbol sourceTypeSymbol) =>
+        $"""
+         new {sourceTypeSymbol.Name}();
+         """;
+
+    public static string InitializeProperties(
+        string ind,
+        IEnumerable<string> fields,
+        IDictionary<string, ISymbol> props)
+    {
+        var sb = new StringBuilder();
+        foreach (string field in fields)
+        {
+            if (props.TryGetValue(field, out var prop))
+            {
+                string varName = FirstCharToLower(prop.Name);
+                string propertyType = GetPropertyType(prop);
+                string propAssignment =
+                    $$"""
+                      {{ind}}if (value.TryGetValue("{{field}}", out object {{varName}}))
+                      {{ind}}{
+                      {{ind}}    {{RESULT}}.{{prop.Name}} = ({{propertyType}}){{varName}};
+                      {{ind}}}
+                      """;
+                sb.AppendLine().AppendLine(propAssignment);
+            }
+        }
+
+        return sb.ToString();
+
+        static string GetPropertyType(ISymbol symbol)
+        {
+            return symbol switch
+            {
+                IPropertySymbol prop => ToDisplayString(prop.Type),
+                IFieldSymbol field => ToDisplayString(field.Type),
+                _ => throw new Exception("unexpected...")
+            };
+
+            static string ToDisplayString(ITypeSymbol type) =>
+                type.SpecialType != SpecialType.None
+                    ? type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
+                    : type.Name;
+        }
+
+        static string FirstCharToLower(string str)
+            => char.ToLowerInvariant(str[0]) + str[1..];
+    }
+}

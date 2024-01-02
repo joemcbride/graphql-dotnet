@@ -61,9 +61,7 @@ public static class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
     {
         public Test()
         {
-            ReferenceAssemblies = ReferenceResolver.ResolveReferenceAssemblies();
-            TestState.AdditionalReferences.Add(typeof(Types.ISchema).Assembly.Location);
-            TestState.AdditionalReferences.Add(typeof(MicrosoftDI.GraphQLBuilder).Assembly.Location);
+            this.Initialize();
         }
     }
 }
