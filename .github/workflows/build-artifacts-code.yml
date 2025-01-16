@@ -5,13 +5,7 @@ name: Build artifacts
 on:
   push:
     branches:
-      - master
-      - develop
-    paths:
-      - src/**
-      - samples/**
-      - .github/workflows/**
-      - '*'
+      - temp123
 
 env:
   NODE_VERSION: '18.x'   # Node 18 LTS, see https://nodejs.org/en/about/releases/
