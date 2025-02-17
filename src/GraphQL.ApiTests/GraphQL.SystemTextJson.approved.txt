@@ -64,6 +64,14 @@ namespace GraphQL.SystemTextJson
         public override void Write(System.Text.Json.Utf8JsonWriter writer, System.Numerics.BigInteger value, System.Text.Json.JsonSerializerOptions options) { }
         public static bool TryGetBigInteger(ref System.Text.Json.Utf8JsonReader reader, out System.Numerics.BigInteger bi) { }
     }
+    public class JsonGraphType : GraphQL.Types.ScalarGraphType
+    {
+        public JsonGraphType() { }
+        public override bool CanParseLiteral(GraphQLParser.AST.GraphQLValue value) { }
+        public override bool CanParseValue(object? value) { }
+        public override object? ParseLiteral(GraphQLParser.AST.GraphQLValue value) { }
+        public override object? ParseValue(object? value) { }
+    }
     public class OperationMessageJsonConverter : System.Text.Json.Serialization.JsonConverter<GraphQL.Transport.OperationMessage>
     {
         public OperationMessageJsonConverter() { }
