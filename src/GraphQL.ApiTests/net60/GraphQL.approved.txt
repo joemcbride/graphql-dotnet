@@ -641,6 +641,11 @@ namespace GraphQL
     {
         public static GraphQL.Inputs ToInputs(this System.Collections.Generic.Dictionary<string, object?> dictionary) { }
     }
+    [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Interface)]
+    public class InterfaceAttribute : System.Attribute
+    {
+        public InterfaceAttribute() { }
+    }
     public class LightweightCache<TKey, TValue> : System.Collections.Generic.IEnumerable<TValue>, System.Collections.IEnumerable
         where TKey :  notnull
     {
@@ -1938,6 +1943,14 @@ namespace GraphQL.Instrumentation
         public System.TimeSpan Elapsed { get; }
         public bool IsActive { get; }
         public static GraphQL.Instrumentation.ValueStopwatch StartNew() { }
+    }
+}
+namespace GraphQL.Internals
+{
+    public class InterfaceUsageAttribute : GraphQL.GraphQLAttribute
+    {
+        public InterfaceUsageAttribute() { }
+        public override void Modify(GraphQL.Types.IGraphType graphType, System.Type sourceType) { }
     }
 }
 namespace GraphQL.Introspection

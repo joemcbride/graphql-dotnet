@@ -82,7 +82,7 @@ public static class GlobalSwitches
     /// <br/><br/>
     /// The collection is not thread-safe; instances should be added prior to schema initialization.
     /// </summary>
-    public static ICollection<GraphQLAttribute> GlobalAttributes { get; } = new List<GraphQLAttribute>();
+    public static ICollection<GraphQLAttribute> GlobalAttributes { get; } = new List<GraphQLAttribute>() { new Internals.InterfaceUsageAttribute() };
 
     /// <summary>
     /// Enables the schema validation rule requiring schemas to have a Query type defined.
