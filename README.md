@@ -7,6 +7,7 @@
 [![GitHub Release Date](https://img.shields.io/github/release-date/graphql-dotnet/graphql-dotnet?label=released)](https://github.com/graphql-dotnet/graphql-dotnet/releases)
 [![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/graphql-dotnet/graphql-dotnet/latest?label=new+commits)](https://github.com/graphql-dotnet/graphql-dotnet/commits/master)
 ![Size](https://img.shields.io/github/repo-size/graphql-dotnet/graphql-dotnet)
+[![Gurubase](https://img.shields.io/badge/Gurubase-Ask%20GraphQL.NET%20Guru-006BFF)](https://gurubase.io/g/graphql-net)
 
 [![GitHub contributors](https://img.shields.io/github/contributors/graphql-dotnet/graphql-dotnet)](https://github.com/graphql-dotnet/graphql-dotnet/graphs/contributors)
 ![Activity](https://img.shields.io/github/commit-activity/w/graphql-dotnet/graphql-dotnet)
