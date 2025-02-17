@@ -39,9 +39,12 @@ public class GraphQLBuilderExtensionTests
             DI.ServiceLifetime.Scoped => ServiceLifetime.Scoped,
             _ => throw new ApplicationException()
         });
-        var serviceProvider = services.BuildServiceProvider();
-        serviceProvider.GetRequiredService<MySchema>().ShouldBeOfType<MySchema>();
-        serviceProvider.GetRequiredService<ISchema>().ShouldBeOfType<MySchema>();
+        using var serviceProvider = services.BuildServiceProvider();
+        var schema1 = serviceProvider.GetRequiredService<MySchema>();
+        schema1.ShouldBeOfType<MySchema>();
+        var schema2 = serviceProvider.GetRequiredService<ISchema>();
+        schema2.ShouldBeOfType<MySchema>();
+        ReferenceEquals(schema1, schema2).ShouldBeTrue();
     }
 
     [Fact]

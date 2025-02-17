@@ -53,17 +53,11 @@ public static class MicrosoftDIGraphQLBuilderExtensions
         builder.Services.Register(provider =>
         {
             var selfActivatingServices = new SelfActivatingServiceProvider(provider);
-            var schema = ActivatorUtilities.CreateInstance<TSchema>(selfActivatingServices);
-            return schema;
+            return ActivatorUtilities.CreateInstance<TSchema>(selfActivatingServices);
         }, serviceLifetime);
 
         // Now register the service as ISchema if not already registered.
-        builder.Services.TryRegister<ISchema>(provider =>
-        {
-            var selfActivatingServices = new SelfActivatingServiceProvider(provider);
-            var schema = ActivatorUtilities.CreateInstance<TSchema>(selfActivatingServices);
-            return schema;
-        }, serviceLifetime);
+        builder.Services.TryRegister<ISchema>(provider => provider.GetRequiredService<TSchema>(), serviceLifetime);
 
         return builder;
     }
